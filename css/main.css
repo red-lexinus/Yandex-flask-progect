@@ -69,8 +69,8 @@ a {
 }
 
 a:hover {
-  color: red;
   text-decoration: none;
+  color: red;
 }
 
 @media (max-width: 1200px) {
@@ -84,6 +84,9 @@ a:hover {
 }
 
 @media (max-width: 800px) {
+  .bs-menu h2 {
+    font-size: 0px;
+  }
   .main {
     margin-left: 0%;
     margin-right: 0%;
