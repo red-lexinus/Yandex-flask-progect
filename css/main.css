@@ -8,11 +8,12 @@ body {
   max-height: 100px;
 }
 
-.header h1 {
+.bs-menu h2 {
   color: rgb(247, 82, 33);
   text-shadow: 3px 3px 0px rgba(255, 2, 2, 0.2),
     2px 2px 0px rgba(255, 2, 2, 0.2);
 }
+
 .header {
   margin-left: 5%;
   margin-right: 5%;
