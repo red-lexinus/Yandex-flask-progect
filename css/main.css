@@ -45,6 +45,21 @@ body {
   margin-right: 20%;
 }
 
+.my_card {
+    min-width: 100%;
+    /* background-color: #b9dfe9; */
+    border-radius: 20px;
+    /* border: rgb(0, 46, 253); */
+    padding: 3%;
+}
+
+.my_card-body {
+    display: flex;
+    border-radius: 20px;
+    align-items: center;
+    flex-flow: row nowrap;
+}
+
 .card {
   width: 100%;
   padding: 1%;
