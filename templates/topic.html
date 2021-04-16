@@ -58,7 +58,10 @@
             <button class="btn btn-primary" type="submit" onclick="add_main_comment()">Оставить коментарий</button>
         </div>
         <div class="add_main_comment">
-            <h3>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim iure eos maiores? Et, ipsa quibusdam.</h3>
+            <div>
+                <textarea name="text" placeholder="Ваш комментарий"></textarea>
+                <button class="btn btn-primary" type="submit">Отправить ответ</button>
+            </div>
         </div>
         <div class="main_comments">
             <div class="main_comment">
@@ -70,12 +73,15 @@
                         <p>Типа комент</p>
                     </div>
                     <div class="buttoms">
-                        <button class="btn btn-primary" type="submit">Написать ответ</button>
+                        <button class="btn btn-primary" type="submit" onclick="add_comment('add_comments_1')">Написать ответ</button>
                         <button class="btn btn-primary" type="submit" onclick="expand_comments('comments_1')">Развернуть ответы</button>
                     </div>
                 </div>
                 <div class="add_comment" id='add_comments_1'>
-
+                    <div>
+                        <textarea name="text" placeholder="Ваш комментарий"></textarea>
+                        <button class="btn btn-primary" type="submit">Отправить ответ</button>
+                    </div>
                 </div>
                 <div class="comments" id='comments_1'>
                     <div class="comment">
@@ -116,9 +122,14 @@
 
         }
         function add_comment(id){
+            document.getElementById(id).hidden  =  !document.getElementById(id).hidden
         }
 
         let n = document.getElementsByClassName('comments');
+        for (let i = 0; i < n.length; ++i){
+            n[i].hidden = true;
+        }
+        n = document.getElementsByClassName('add_comment');
         for (let i = 0; i < n.length; ++i){
             n[i].hidden = true;
         }
