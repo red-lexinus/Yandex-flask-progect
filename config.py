@@ -6,7 +6,6 @@ import tokens
 
 app = Flask(__name__)
 
-
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{tokens.USERNAME}:{tokens.PASSWORD}@{tokens.HOST}/{tokens.BASE_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = tokens.SECRET_KEY
