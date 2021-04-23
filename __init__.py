@@ -3,6 +3,7 @@ from flask import render_template
 from models import *
 from forms import *
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('main.html')
