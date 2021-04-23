@@ -1,8 +1,6 @@
 from config import db
 from flask_login import LoginManager, UserMixin
 
-global_id = 0
-
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
