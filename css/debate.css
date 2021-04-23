@@ -1,0 +1,44 @@
+.search_debate {
+  align-items: center;
+  margin-top: 2%;
+  min-width: 100%;
+}
+
+.search_debate .label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.debate {
+  margin-top: 5%;
+  min-width: 100%;
+}
+
+.debate {
+  min-width: 100%;
+  /* background: linear-gradient(to bottom right, rgb(255, 76, 76), rgb(255, 243, 72)); */
+  border-radius: 20px;
+  border: rgb(0, 46, 253);
+  padding: 3%;
+}
+
+.debate_body {
+  display: flex;
+  border-radius: 20px;
+  align-items: center;
+  flex-flow: row nowrap;
+}
+
+.debate_body img {
+  max-width: 25%;
+}
+
+.body_text {
+  margin-left: 3%;
+  min-width: 72%;
+  max-width: 72%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
