@@ -22,7 +22,5 @@ app.config['UPLOAD_DIR'] = os.path.join(app.config['STATIC_DIR'], 'img')
 
 db = SQLAlchemy(app)
 
-#login_manager = LoginManager(app)
-#login_manager.login_view = 'login'
-
-
+# login_manager = LoginManager(app)
+# login_manager.login_view = 'login'
