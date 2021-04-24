@@ -78,13 +78,13 @@ def create_new_additional_comments(id_main_comment, id_author, message):
     return [True, 'Поздравляю']
 
 
-def search_topics_with_user_id(user_id):
+def search_topics_through_user_id(user_id):
     sql = text(f'select id, id_author, name, question from topics where id_author = {user_id}')
     results = [row for row in db.engine.execute(sql)]
     return results
 
 
-def search_topics_with_username(username):
+def search_topics_through_username(username):
     sql = text(f'select id from users where username = "{username}"')
     results = [row for row in db.engine.execute(sql)]
     try:
