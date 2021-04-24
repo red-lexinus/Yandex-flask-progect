@@ -10,6 +10,8 @@ import database_functions as db_f
 
 
 login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
 
 
 @login_manager.user_loader
@@ -60,10 +62,15 @@ def prof():
 def reg():
     form = RegForm()
     print(request.method)
-    if request.method == "POST":
-        print(2323)
-        return render_template('reg.html', form=form)
-        # res = database_functions.log_user(form.username, form.password)
+    if form.validate_on_submit():
+        log_info = db_f.reg_user(form.username.data, form.password.data)
+        if log_info[0]:
+            flash('Вы успешно вошли поздраляем', 'alert alert-success')
+            user_login = UserLogin().create_log(log_info[1])
+            # # print(user_login.get_id())
+            login_user(user_login)
+        else:
+            flash(log_info[1], 'alert alert-danger')
     if 'username' in form.errors:
         flash('Длина вашего имени слишком мала', 'error')
     if 'password' in form.errors:

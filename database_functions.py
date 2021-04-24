@@ -20,6 +20,14 @@ def check_new_additional_comment(message):
     return [True]
 
 
+def search_user(name):
+    sql = text(f'select * from users where username = "{name}"')
+    results = [row for row in db.engine.execute(sql)]
+    if len(results) != 0:
+        return [True, [elem for elem in results[0]]]
+    return [False, 'Пользователя с таким именем не существует']
+
+
 def log_user(name, password):
     sql = text(f'select * from users where username = "{name}"')
     results = [row for row in db.engine.execute(sql)]
@@ -30,6 +38,11 @@ def log_user(name, password):
         return [False, 'Вы указали неверный пароль']
     return [False, 'Пользователя с таким именем не существует']
 
+
+def reg_user(name, password):
+    if not create_new_user(name, password):
+        return [False, 'Пользователь с таким именем уже существует']
+    return search_user(name)
 
 
 def create_new_user(name, password):

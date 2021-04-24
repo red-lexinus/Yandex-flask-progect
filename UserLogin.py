@@ -1,7 +1,9 @@
 class UserLogin:
     def create_log(self, user_info):
         self.user_info = user_info
-        return self
+
+    def is_authenticated(self):
+        return True
 
     def is_active(self):
         return True
