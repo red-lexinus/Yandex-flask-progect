@@ -7,21 +7,6 @@ from sqlalchemy import text
 # result = db.engine.execute(sql)
 # names = [row[0] for row in result]
 
-def check_username(username):
-    return [True, 'сообщение']
-
-
-def check_password(password):
-    return [True, 'сообщение']
-
-
-def check_username(username):
-    return [True, 'сообщение']
-
-
-def check_password(password):
-    return [True, 'сообщение']
-
 
 def check_new_topic(name, question, explanation):
     return [True, 'сообщение']
@@ -35,19 +20,22 @@ def check_new_additional_comment(message):
     return [True]
 
 
+def log_user(name, password):
+    sql = text(f'select id from users where username = "{name}" and password = "{password}"')
+    results = [row[0] for row in db.engine.execute(sql)]
+    print(results)
+    return results
+
+
 def create_new_user(name, password):
-    if not check_username(password)[0]:
-        return check_username(password)[1]
-    if not check_password(password)[0]:
-        return check_password(password)[1]
     sql = text(f'select username from users where username = "{name}"')
     results = [row[0] for row in db.engine.execute(sql)]
     if len(results) != 0:
-        return [False, 'Данное имя пользователя уже занято']
+        return False
     i = User(name, password)
     db.session.add(i)
     db.session.commit()
-    return [True, 'Поздравляю с успешной регистрацией']
+    return True
 
 
 def create_new_topic(id_author, name, question, explanation):
@@ -57,7 +45,7 @@ def create_new_topic(id_author, name, question, explanation):
     topic = Topic(id_author=id_author, name=name, question=question, explanation=explanation)
     db.session.add(topic)
     db.session.commit()
-    return [True, 'Поздравляю']
+    return True
 
 
 def create_new_main_comment(id_topic, id_author, message):
@@ -66,7 +54,7 @@ def create_new_main_comment(id_topic, id_author, message):
     main_comment = MainComment(id_topic=id_topic, id_author=id_author, message=message)
     db.session.add(main_comment)
     db.session.commit()
-    return [True, 'Поздравляю']
+    return True
 
 
 def create_new_additional_comments(id_main_comment, id_author, message):
@@ -75,7 +63,7 @@ def create_new_additional_comments(id_main_comment, id_author, message):
     main_comment = AdditionalComment(id_main_comment=id_main_comment, id_author=id_author, message=message)
     db.session.add(main_comment)
     db.session.commit()
-    return [True, 'Поздравляю']
+    return True
 
 
 def search_topics_through_user_id(user_id):
@@ -114,6 +102,3 @@ def search_comments(id_topic):
             f'select id,id_main_comment, id_author, message  from additional_comments where id_main_comment = {results[i][0][0]}')
         results[i].append([row for row in db.engine.execute(sql)])
     return results
-
-
-

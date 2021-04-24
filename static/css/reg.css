@@ -1,0 +1,13 @@
+.card {
+    width: auto;
+    padding: 5%;
+}
+
+#form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1%;
+}
+
+}
