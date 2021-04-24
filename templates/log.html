@@ -9,9 +9,6 @@
 {% endblock %}
 
 {% block body %}
-    {% for cat, msg in get_flashed_messages(True) %}
-        <div class="{{ cat }}" role="alert">{{ msg }}</div>
-    {% endfor %}
     <div class="main">
         <div class="card">
             <div class="card-body">

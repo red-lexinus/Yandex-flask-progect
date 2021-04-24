@@ -1,18 +1,21 @@
 from config import app
 import flask
 from flask import render_template, request, flash
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+
 from models import *
 from forms import *
-import database_functions
+from UserLogin import UserLogin
+import database_functions as db_f
 
 
-# login_manager = LoginManager()
-# login_manager.init_app(app)
-#
-#
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return User.get(user_id)
+login_manager = LoginManager(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return UserLogin.create_log(UserLogin(), user_id)
+
 
 # @app.route('/login', methods=['GET', 'POST'])
 # def login():
@@ -43,6 +46,7 @@ def index():
 
 
 @app.route('/main', methods=['GET', 'POST'])
+# @login_required
 def main():
     return render_template('main.html')
 
@@ -67,24 +71,31 @@ def reg():
     return render_template('reg.html', form=form)
 
 
-
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        print(1)
-        # return render_template('reg.html', form=form)
-        # res = database_functions.log_user(form.username, form.password)
-        # print(len(res))
+        log_info = db_f.log_user(form.username.data, form.password.data)
+        if log_info[0]:
+            flash('Вы успешно вошли поздраляем', 'alert alert-success')
+            user_login = UserLogin().create_log(log_info[1])
+            # print(user_login.get_id())
+            login_user(user_login)
+        else:
+            flash(log_info[1], 'alert alert-danger')
+
     if 'username' in form.errors:
-        print(1)
-        flash('Длина вашего имени слишком мала', 'alert alert-success')
+        flash('Длина вашего имени слишком мала', 'alert alert-danger')
     if 'password' in form.errors:
-        print(2)
         flash('Длина вашего пароля слишком мала', 'alert alert-danger')
     return render_template('log.html', form=form)
+
+
+# @app.route('/profile', methods=['GET', 'POST'])
+# @login_required
+# def profile():
+
+
 
 @app.route('/disc', methods=['GET', 'POST'])
 def disc():

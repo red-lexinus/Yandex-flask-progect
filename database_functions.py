@@ -21,10 +21,15 @@ def check_new_additional_comment(message):
 
 
 def log_user(name, password):
-    sql = text(f'select id from users where username = "{name}" and password = "{password}"')
-    results = [row[0] for row in db.engine.execute(sql)]
-    print(results)
-    return results
+    sql = text(f'select * from users where username = "{name}"')
+    results = [row for row in db.engine.execute(sql)]
+    # print(results)
+    if len(results) != 0:
+        if results[0][2] == password:
+            return [True, [elem for elem in results[0]]]
+        return [False, 'Вы указали неверный пароль']
+    return [False, 'Пользователя с таким именем не существует']
+
 
 
 def create_new_user(name, password):
