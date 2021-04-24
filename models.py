@@ -38,3 +38,5 @@ class AdditionalComment(db.Model):
     id_main_comment = db.Column(db.Integer, primary_key=False)
     id_author = db.Column(db.Integer, primary_key=False)
     message = db.Column(db.String(1600), nullable=False)
+
+# db.create_all()

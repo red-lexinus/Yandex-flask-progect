@@ -35,16 +35,16 @@ def check_new_additional_comment(message):
     return [True]
 
 
-def create_new_user(username, password):
+def create_new_user(name, password):
     if not check_username(password)[0]:
         return check_username(password)[1]
     if not check_password(password)[0]:
         return check_password(password)[1]
-    sql = text(f'select username from users where username = {username}')
+    sql = text(f'select username from users where username = "{name}"')
     results = [row[0] for row in db.engine.execute(sql)]
     if len(results) != 0:
         return [False, 'Данное имя пользователя уже занято']
-    i = User(username, password)
+    i = User(name, password)
     db.session.add(i)
     db.session.commit()
     return [True, 'Поздравляю с успешной регистрацией']
@@ -76,3 +76,48 @@ def create_new_additional_comments(id_main_comment, id_author, message):
     db.session.add(main_comment)
     db.session.commit()
     return [True, 'Поздравляю']
+
+
+def search_user_id_topics(user_id):
+    sql = text(f'select id, id_author, name, question from topics where id_author = {user_id}')
+    results = [row for row in db.engine.execute(sql)]
+    return results
+
+
+def search_username_topics(username):
+    sql = text(f'select id from users where username = "{username}"')
+    results = [row for row in db.engine.execute(sql)]
+    try:
+        sql = text(f'select id, id_author, name, question from topics where id_author = {results[0][0]}')
+        results = [row for row in db.engine.execute(sql)]
+        return results
+    except IndexError:
+        return []
+
+
+def search_topics(max_len, name='', question=''):
+    sql = text(f'select id, id_author, name, question from topics')
+    results = []
+    for row in db.engine.execute(sql):
+        if name in row[2] and question in row[3]:
+            results.append(row)
+            if len(results) == max_len:
+                return results
+    return results
+
+
+def search_comments(id_topic):
+    sql = text(f'select id,id_topic, id_author, message  from main_comments where id_topic = {id_topic}')
+    results = [[row] for row in db.engine.execute(sql)]
+    for i in range(len(results)):
+        sql = text(
+            f'select id,id_main_comment, id_author, message  from additional_comments where id_main_comment = {results[i][0][0]}')
+        results[i].append([row for row in db.engine.execute(sql)])
+    return results
+
+
+# create_new_user('admin', 'yandex_password')
+# create_new_topic(1, 'проверочный топик', 'вопросик', '')
+# create_new_main_comment(1, 1, '323fwg434')
+# create_new_main_comment(1, 1, '323fwg4334234')
+print(search_username_topics('admin'))
