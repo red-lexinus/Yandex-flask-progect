@@ -1,6 +1,7 @@
 class UserLogin:
-    def create_log(self, user_info):
-        self.user_info = user_info
+    def create_log(self, id):
+        self.user_id = id
+        return self
 
     def is_authenticated(self):
         return True
@@ -12,4 +13,4 @@ class UserLogin:
         return False
 
     def get_id(self):
-        return str(self.user_info[0])
+        return str(self.user_id)

@@ -40,8 +40,13 @@ def log_user(name, password):
 
 
 def reg_user(name, password):
-    if not create_new_user(name, password):
+    sql = text(f'select username from users where username = "{name}"')
+    results = [row[0] for row in db.engine.execute(sql)]
+    if len(results) != 0:
         return [False, 'Пользователь с таким именем уже существует']
+    i = User(name, password)
+    db.session.add(i)
+    db.session.commit()
     return search_user(name)
 
 
@@ -54,6 +59,12 @@ def create_new_user(name, password):
     db.session.add(i)
     db.session.commit()
     return True
+
+
+def search_user_id(user_id):
+    sql = text(f'select username from users where id = "{user_id}"')
+    results = [row[0] for row in db.engine.execute(sql)]
+    return results[0]
 
 
 def create_new_topic(id_author, name, question, explanation):
@@ -120,3 +131,11 @@ def search_comments(id_topic):
             f'select id,id_main_comment, id_author, message  from additional_comments where id_main_comment = {results[i][0][0]}')
         results[i].append([row for row in db.engine.execute(sql)])
     return results
+
+
+def change_password(user_id, new_password):
+    item = User.query.get(user_id)
+    item.password = new_password
+    db.session.commit()
+
+

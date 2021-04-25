@@ -15,3 +15,8 @@ class RegForm(FlaskForm):
     password = PasswordField('Пароль', validators=[DataRequired(), Length(min=5, max=200)])
     remember_me = BooleanField('Запомнить меня', default=False)
     submit = SubmitField('Зарегестрироваться')
+
+
+class ChangePassword(FlaskForm):
+    password = PasswordField('Новый пароль', validators=[DataRequired(), Length(min=5, max=200)])
+    submit = SubmitField('Изменить пароль')
