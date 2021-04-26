@@ -16,9 +16,9 @@
             <button class="btn btn-primary" type="submit" onclick="add_main_comment()">Оставить коментарий</button>
         </div>
         <div class="add_main_comment">
-            <form method="post" id="first_form">
+            <form method="post">
                 <div>
-                    <textarea name="text" placeholder="Ваш комментарий"></textarea>
+                    <textarea name="main" placeholder="Ваш комментарий"></textarea>
                     <button class="btn btn-primary" type="submit">Отправить ответ</button>
                 </div>
             </form>
@@ -47,9 +47,9 @@
                         </div>
                     </div>
                     <div class="add_comment" id='add_comments_{{ comment['id'] }}'>
-                        <form id="form_{{ comment['id'] }}" method="post">
+                        <form method="post">
                             <div>
-                                <textarea name="text" placeholder="Ваш комментарий"></textarea>
+                                <textarea name="{{ comment['id'] }}" placeholder="Ваш комментарий"></textarea>
                                 <button class="btn btn-primary" type="submit">Отправить ответ</button>
                             </div>
                         </form>

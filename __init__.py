@@ -123,8 +123,10 @@ def disc():
     return render_template('main.html')
 
 
-@app.route('/subject<int:topic_id>')
+@app.route('/subject<int:topic_id>', methods=['GET', 'POST'])
 def subject(topic_id):
+    if request.method == 'POST':
+        print(request.form[0])
     data = db_f.search_comments(topic_id)
     new_data = []
     info = db_f.search_topics(topic_id)
