@@ -1,6 +1,6 @@
 from config import app
 import flask
-from flask import render_template, request, flash
+from flask import render_template, request, flash, redirect, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 from models import *
@@ -8,15 +8,15 @@ from forms import *
 from UserLogin import UserLogin
 import database_functions as db_f
 
-
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
-
+login_manager.login_message = 'Авторизируйтесь пожалуйста'
+login_manager.login_message_category = 'alert alert-success'
 
 
 @login_manager.user_loader
-def load_user(user_id):
-    return UserLogin.create_log(UserLogin(), user_id)
+def load_user(info):
+    return UserLogin().create_log(info)
 
 
 # @app.route('/login', methods=['GET', 'POST'])
@@ -54,40 +54,72 @@ def main():
 
 
 @app.route('/prof', methods=['GET', 'POST'])
+@login_required
 def prof():
-    return render_template('log.html')
+    username = db_f.search_user_id(current_user.get_id())
+    return render_template('prof.html', name=username)
+
+
+@app.route('/logout', methods=['GET', 'POST'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+
+@app.route('/change_password', methods=['GET', 'POST'])
+def change_password():
+    form = ChangePassword()
+    if form.validate_on_submit():
+        db_f.change_password(int(current_user.get_id()), form.password.data)
+        flash('Вы успешно изменили свой пароль',
+              'alert alert-success')
+        return redirect(request.args.get('next') or url_for('prof'))
+    if 'password' in form.errors:
+        flash('Длина вашего пароля слишком мала', 'alert alert-danger')
+    return render_template('change_password.html', form=form)
 
 
 @app.route('/reg', methods=['GET', 'POST'])
 def reg():
     form = RegForm()
-    print(request.method)
     if form.validate_on_submit():
         log_info = db_f.reg_user(form.username.data, form.password.data)
         if log_info[0]:
-            flash('Вы успешно вошли поздраляем', 'alert alert-success')
-            user_login = UserLogin().create_log(log_info[1])
-            # # print(user_login.get_id())
-            login_user(user_login)
+            # print(log_info[1][0])
+            flash('Вы успешно зарегистрировались поздраляем(теперь для запоминания пароля авторизируйтесь)',
+                  'alert alert-success')
+            # user_login = UserLogin().create_log(log_info[1][0])
+            # # # print(user_login.get_id())
+            # login_user(user_login, remember=form.remember_me.data)
+            return redirect(url_for('login'))
         else:
             flash(log_info[1], 'alert alert-danger')
     if 'username' in form.errors:
-        flash('Длина вашего имени слишком мала', 'error')
+        flash('Длина вашего имени слишком мала', 'alert alert-danger')
     if 'password' in form.errors:
-        flash('Длина вашего пароля слишком мала', 'error')
+        flash('Длина вашего пароля слишком мала', 'alert alert-danger')
     return render_template('reg.html', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    try:
+        if current_user.is_authenticated():
+            return redirect(request.args.get('next') or url_for('prof'))
+    except:
+        pass
     form = LoginForm()
     if form.validate_on_submit():
         log_info = db_f.log_user(form.username.data, form.password.data)
+        print(log_info)
         if log_info[0]:
+            print(log_info[1][0])
             flash('Вы успешно вошли поздраляем', 'alert alert-success')
-            user_login = UserLogin().create_log(log_info[1])
+            user_login = UserLogin().create_log(log_info[1][0])
             # print(user_login.get_id())
-            login_user(user_login)
+            login_user(user_login, remember=form.remember_me.data)
+            return redirect(request.args.get('next') or url_for('prof'))
         else:
             flash(log_info[1], 'alert alert-danger')
 
@@ -103,7 +135,6 @@ def login():
 # def profile():
 
 
-
 @app.route('/disc', methods=['GET', 'POST'])
 def disc():
     return render_template('main.html')
@@ -111,7 +142,14 @@ def disc():
 
 @app.route('/topic', methods=['GET', 'POST'])
 def topic():
-    return render_template('main.html')
+    arr = db_f.search_topics(10)
+    res = []
+    for i in arr:
+        new_arr = [d for d in i]
+        elem = {'id': new_arr[0], 'id_author': new_arr[1], 'name': new_arr[2], 'info': new_arr[3]}
+        res.append(elem)
+    print(res)
+    return render_template('topics.html', topics=res)
 
 
 if __name__ == '__main__':
