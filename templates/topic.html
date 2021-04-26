@@ -9,107 +9,92 @@
 {% endblock %}
 {% block body %}
     <div class="main">
-        {% for elem in cooments %}
-            <div class="topic" style="background-color: rgb(141, 218, 211);">
-            <h1>{{elem['author']}}</h1>
-            <h1>{{elem['author']}}</h1>
-            <p>{{elem['author']}}</p>
-
-        {% endfor %}
-
         <div class="topic" style="background-color: rgb(141, 218, 211);">
-            <h1>Автор</h1>
-            <h1>Вопрос</h1>
-            <p>Развёрнутое объяснение</p>
+            <h1>{{ topic_info['author'] }}</h1>
+            <h1>{{ topic_info['question'] }}</h1>
+            <p>{{ topic_info['explanation'] }}</p>
             <button class="btn btn-primary" type="submit" onclick="add_main_comment()">Оставить коментарий</button>
         </div>
         <div class="add_main_comment">
-            <div>
-                <textarea name="text" placeholder="Ваш комментарий"></textarea>
-                <button class="btn btn-primary" type="submit">Отправить ответ</button>
-            </div>
+            <form method="post">
+                <div>
+                    <textarea name="text" placeholder="Ваш комментарий"></textarea>
+                    <button class="btn btn-primary" type="submit">Отправить ответ</button>
+                </div>
+            </form>
         </div>
         <div class="main_comments">
-            <div class="main_comment">
-                <div class="comment">
-                    <div class="comment_head">
-                        <h1>Автор+фото</h1>
-                    </div>
-                    <div class="comment_body">
-                        <p>Типа комент</p>
-                    </div>
-                    <div class="buttoms">
-                        <button class="btn btn-primary" type="submit" onclick="add_comment('add_comments_1')">Написать
-                            ответ
-                        </button>
-                        <button class="btn btn-primary" type="submit" onclick="expand_comments('comments_1')">Развернуть
-                            ответы
-                        </button>
-                    </div>
-                </div>
-                <div class="add_comment" id='add_comments_1'>
-                    <div>
-                        <textarea name="text" placeholder="Ваш комментарий"></textarea>
-                        <button class="btn btn-primary" type="submit">Отправить ответ</button>
-                    </div>
-                </div>
-                <div class="comments" id='comments_1'>
+            {% for elem in cooments %}
+                <div class="main_comment">
                     <div class="comment">
                         <div class="comment_head">
-                            <h1>Автор+фото</h1>
+                            <h1>{{ elem['author'] }}</h1>
                         </div>
                         <div class="comment_body">
-                            <p>Типа комент</p>
+                            <p>{{ elem['message'] }}</p>
+                        </div>
+                        <div class="buttoms">
+                            <button class="btn btn-primary" type="submit"
+                                    onclick="add_comment('add_comments_{{ elem['id'] }}')">
+                                Написать
+                                ответ
+                            </button>
+                            <button class="btn btn-primary" type="submit"
+                                    onclick="expand_comments('comments_{{ elem['id'] }}')">
+                                Развернуть
+                                ответы
+                            </button>
                         </div>
                     </div>
-                    <div class="comment">
-                        <div class="comment_head">
-                            <h1>Автор+фото</h1>
-                        </div>
-                        <div class="comment_body">
-                            <p>Типа комент</p>
+                    <div class="add_comment" id='add_comments_{{ elem['id'] }}'>
+                        <div>
+                            <textarea name="text" placeholder="Ваш комментарий"></textarea>
+                            <button class="btn btn-primary" type="submit">Отправить ответ</button>
                         </div>
                     </div>
-                    <div class="comment">
-                        <div class="comment_head">
-                            <h1>Автор+фото</h1>
-                        </div>
-                        <div class="comment_body">
-                            <p>Типа комент</p>
-                        </div>
+                    <div class="comments" id='comments_{{ elem['id'] }}'>
+                        {% for el in elem['comments'] %}
+                            <div class="comment">
+                                <div class="comment_head">
+                                    <h1>Автор+фото</h1>
+                                </div>
+                                <div class="comment_body">
+                                    <p>Типа комент</p>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
-            </div>
-
+            {% endfor %}
         </div>
-        </div>
-        <script>
-            function expand_comments(id) {
-                document.getElementById(id).hidden = !document.getElementById(id).hidden
-            }
+    </div>
+    <script>
+        function expand_comments(id) {
+            document.getElementById(id).hidden = !document.getElementById(id).hidden
+        }
 
-            function add_main_comment() {
-                document.getElementsByClassName('add_main_comment')[0].hidden = !document.getElementsByClassName('add_main_comment')[0].hidden
+        function add_main_comment() {
+            document.getElementsByClassName('add_main_comment')[0].hidden = !document.getElementsByClassName('add_main_comment')[0].hidden
 
-            }
+        }
 
-            function add_comment(id) {
-                document.getElementById(id).hidden = !document.getElementById(id).hidden
-            }
+        function add_comment(id) {
+            document.getElementById(id).hidden = !document.getElementById(id).hidden
+        }
 
-            let n = document.getElementsByClassName('comments');
-            for (let i = 0; i < n.length; ++i) {
-                n[i].hidden = true;
-            }
-            n = document.getElementsByClassName('add_comment');
-            for (let i = 0; i < n.length; ++i) {
-                n[i].hidden = true;
-            }
-            document.getElementsByClassName('add_main_comment')[0].hidden = true
-        </script>
+        let n = document.getElementsByClassName('comments');
+        for (let i = 0; i < n.length; ++i) {
+            n[i].hidden = true;
+        }
+        n = document.getElementsByClassName('add_comment');
+        for (let i = 0; i < n.length; ++i) {
+            n[i].hidden = true;
+        }
+        document.getElementsByClassName('add_main_comment')[0].hidden = true
+    </script>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
-                crossorigin="anonymous">
-        </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+            crossorigin="anonymous">
+    </script>
 {% endblock %}

@@ -127,6 +127,9 @@ def disc():
 def subject(topic_id):
     data = db_f.search_comments(topic_id)
     new_data = []
+    info = db_f.search_topics(topic_id)
+    topic_info = {'id_topic': info[0][0], 'author': db_f.search_user_id(info[0][1]), 'question': info[0][2], 'explanation': info[0][3],
+                  'author_id': info[0][1]}
     for i in data:
         comments = []
         for d in i[1]:
@@ -138,7 +141,7 @@ def subject(topic_id):
             'id': i[0][0], 'id_topic': i[0][1], 'author': db_f.search_user_id(i[0][2]), 'message': i[0][3], 'comments': comments
         }
         new_data.append(main_keys)
-    return render_template('topic.html', comments=new_data)
+    return render_template('topic.html', comments=new_data, topic_info=topic_info)
 
 
 @app.route('/topic', methods=['GET', 'POST'])

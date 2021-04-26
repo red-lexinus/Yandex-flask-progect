@@ -112,6 +112,12 @@ def search_topics_through_username(username):
         return []
 
 
+def search_topics(id_topic):
+    sql = text(f'select id, id_author, name, question from topics where id_author = {id_topic}')
+    results = [row for row in db.engine.execute(sql)]
+    return results
+
+
 def search_topics(max_len, name='', question=''):
     sql = text(f'select id, id_author, name, question from topics')
     results = []
@@ -135,7 +141,6 @@ def search_comments(id_topic):
 
 def del_post(id_topic):
     db.engine.execute(text(f'DELETE  FROM  topics WHERE id = {id_topic}'))
-
 
 
 def change_password(user_id, new_password):
