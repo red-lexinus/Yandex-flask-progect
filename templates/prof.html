@@ -1,32 +1,39 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    <title>Ваш профиль)</title>
+<title>Ваш профиль)</title>
 {% endblock %}
 
 {% block styles %}
-    <link href="{{ url_for('static', filename='css/reg.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/reg.css') }}" rel="stylesheet"/>
 {% endblock %}
 
 {% block body %}
-    <div class="main">
-        <div class="card">
-            <div class="card-body">
-                <h1>{{ name }}</h1>
-                <a href="{{ url_for('test') }}">
-                    <button type="button" class="btn btn-primary">Пройти тест на полит партии</button>
-                </a>
-                <a href="{{ url_for('change_password') }}">
-                    <button type="button" class="btn btn-primary">Изменить свой пароль</button>
-                </a>
-                <a href="{{ url_for('create_new_post') }}">
-                    <button type="button" class="btn btn-primary">Создать новый пост</button>
-                </a>
-                <a href="{{ url_for('logout') }}">
-                    <button type="button" class="btn btn-primary">Выйти из своего аккаунта</button>
-                </a>
+<div class="main">
+    <div class="card">
+        <div class="card-body">
+            <h1>{{ name }}</h1>
+            <a href="{{ url_for('test') }}">
+                <button type="button" class="btn btn-primary">Пройти тест на полит партии</button>
+            </a>
+            <a href="{{ url_for('change_password') }}">
+                <button type="button" class="btn btn-primary">Изменить свой пароль</button>
+            </a>
+            <a href="{{ url_for('create_new_post') }}">
+                <button type="button" class="btn btn-primary">Создать новый пост</button>
+            </a>
+            Результаты вашего теста:
+            <a href="{{ url_for('res', e=e, d=d, g=g, s=s) }}">
+                <button type="button" class="btn btn-primary">Результаты</button>
+            </a>
+            <a href="{{ url_for('test') }}">
+                <button type="button" class="btn btn-primary">Пройти тест</button>
+            </a>
+            <a href="{{ url_for('logout') }}">
+                <button type="button" class="btn btn-primary">Выйти из своего аккаунта</button>
+            </a>
 
-            </div>
         </div>
     </div>
+</div>
 {% endblock %}

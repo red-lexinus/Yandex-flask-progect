@@ -61,6 +61,32 @@ def create_new_user(name, password):
     return True
 
 
+def save_test_result(user_id, e, d, g, s):
+    print(user_id)
+    sql = text(f'select id from tests where id = {user_id}')
+    results = [row[0] for row in db.engine.execute(sql)]
+    print(results)
+    if len(results) != 0:
+
+        i = Test.query.get(user_id)
+        i.economic = e
+        i.dyplomatic = d
+        i.civic = g
+        i.social = s
+    else:
+        i = Test(user_id, e, d, g, s)
+    db.session.add(i)
+    db.session.commit()
+    return True
+
+def search_test_from_id(user_id):
+    sql = text(f'select * from tests where id = {user_id}')
+    results = [row[1:] for row in db.engine.execute(sql)]
+    if results[0]:
+        return results[0]
+    else:
+        return [50, 50, 50, 50]
+
 def search_user_id(user_id):
     sql = text(f'select username from users where id = "{user_id}"')
     results = [row[0] for row in db.engine.execute(sql)]
