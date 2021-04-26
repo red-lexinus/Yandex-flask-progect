@@ -20,7 +20,7 @@
 <h1>8values</h1>
 <hr>
 <h2 style="text-align:center;" id="question-number">Loading...</h2>
-questions.length
+
 <p class="question" id="question-text"></p>
 <button class="button stronglyAgree" onclick="next_question( 1.0)">Strongly Agree</button> <br>
 <button class="button agree" onclick="next_question( 0.5)">Agree</button> <br>
@@ -82,7 +82,7 @@ stats"></a></div></noscript>
         govt_array[qn] = mult*questions[qn].effect.govt
         scty_array[qn] = mult*questions[qn].effect.scty
         qn++;
-        if (qn < 3) {
+        if (qn < questions.length) {
             init_question();
         } else {
             results();
