@@ -28,10 +28,10 @@
                             <h1>{{ elem['name'] }}</h1>
                             <p>{{ elem['info'] }}</p>
                             <div class="buttons">
-                                <a class="btn btn-primary" href="#" role="button" style="min-width: 30%;">Перейти к
+                                <a class="btn btn-primary" href="{{ url_for('subject', topic_id=elem['int_id']) }}" role="button" style="min-width: 30%;">Перейти к
                                     теме</a>
                                 {% if elem['flag_tag'] %}
-                                    <a class="btn btn-primary" href="#" role="button" style="min-width: 30%;">Удалить тему</a>
+                                    <a class="btn btn-primary" href="{{ url_for('del_post', number=elem['int_id']) }}" role="button" style="min-width: 30%;">Удалить тему</a>
                                 {% endif %}
                             </div>
                         </div>

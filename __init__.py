@@ -19,29 +19,6 @@ def load_user(info):
     return UserLogin().create_log(info)
 
 
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     # Here we use a class of some kind to represent and validate our
-#     # client-side form data. For example, WTForms is a library that will
-#     # handle this for us, and we use a custom LoginForm to validate.
-#     form = LoginForm()
-#     if form.validate_on_submit():
-#         # Login and validate the user.
-#         # user should be an instance of your `User` class
-#         login_user(user)
-#
-#         flask.flash('Logged in successfully.')
-#
-#         next = flask.request.args.get('next')
-#         # is_safe_url should check if the url is safe for redirects.
-#         # See http://flask.pocoo.org/snippets/62/ for an example.
-#         if not is_safe_url(next):
-#             return flask.abort(400)
-#
-#         return flask.redirect(next or flask.url_for('index'))
-#     return flask.render_template('login.html', form=form)
-
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('main.html')
@@ -146,19 +123,34 @@ def disc():
     return render_template('main.html')
 
 
+@app.route('/subject<int:topic_id>')
+def subject(topic_id):
+    data = db_f.search_comments(topic_id)
+    new_data = []
+    for i in data:
+        comments = []
+        for d in i[1]:
+            new_keys = {
+                'id': d[0], 'id_comment': d[1], 'author': db_f.search_user_id(d[2]), 'message': d[3]
+            }
+            comments.append(new_keys)
+        main_keys = {
+            'id': i[0][0], 'id_topic': i[0][1], 'author': db_f.search_user_id(i[0][2]), 'message': i[0][3], 'comments': comments
+        }
+        new_data.append(main_keys)
+    return render_template('topic.html', comments=new_data)
+
+
 @app.route('/topic', methods=['GET', 'POST'])
 def topic():
-    try:
-        arr = db_f.search_topics(10)
-        res = []
-        for i in arr:
-            new_arr = [d for d in i]
-            elem = {'id': new_arr[0], 'id_author': new_arr[1], 'name': new_arr[2], 'info': new_arr[3],
-                    'flag_tag': current_user.get_id() in ['1', str(new_arr[0])]}
-            res.append(elem)
-        return render_template('topics.html', topics=res)
-    except:
-        topic()
+    arr = db_f.search_topics(10)
+    res = []
+    for i in arr:
+        new_arr = [d for d in i]
+        elem = {'id': new_arr[0], 'id_author': new_arr[1], 'name': new_arr[2], 'info': new_arr[3],
+                'flag_tag': current_user.get_id() in ['1', str(new_arr[0])], 'int_id': int(new_arr[0])}
+        res.append(elem)
+    return render_template('topics.html', topics=res)
 
 
 @app.route('/test', methods=['GET', 'POST'])
@@ -176,12 +168,18 @@ def quiz():
     return render_template('8values/quiz.html')
 
 
+@app.route('/del_post<int:number>', methods=['GET', 'POST'])
+def del_post(number):
+    db_f.del_post(number)
+    return redirect(url_for('topic'))
+
+
 @app.route('/test/results', methods=['GET', 'POST'])
 def res():
-    economics = request.args.get('e', default=1, type=float)
-    dyplomatic = request.args.get('d', default=1, type=float)
-    civil = request.args.get('g', default=1, type=float)
-    societal = request.args.get('s', default=1, type=float)
+    e = request.args.get('e', default=1, type=float)
+    d = request.args.get('d', default=1, type=float)
+    g = request.args.get('g', default=1, type=float)
+    s = request.args.get('s', default=1, type=float)
     return render_template('8values/results.html')
 
 
@@ -195,6 +193,7 @@ def create_new_post():
         return render_template('create_new_post.html', form=form)
     except:
         create_new_post()
+
 
 if __name__ == '__main__':
     while True:

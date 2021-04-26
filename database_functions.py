@@ -133,6 +133,11 @@ def search_comments(id_topic):
     return results
 
 
+def del_post(id_topic):
+    db.engine.execute(text(f'DELETE  FROM  topics WHERE id = {id_topic}'))
+
+
+
 def change_password(user_id, new_password):
     item = User.query.get(user_id)
     item.password = new_password

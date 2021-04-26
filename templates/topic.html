@@ -9,6 +9,14 @@
 {% endblock %}
 {% block body %}
     <div class="main">
+        {% for elem in cooments %}
+            <div class="topic" style="background-color: rgb(141, 218, 211);">
+            <h1>{{elem['author']}}</h1>
+            <h1>{{elem['author']}}</h1>
+            <p>{{elem['author']}}</p>
+
+        {% endfor %}
+
         <div class="topic" style="background-color: rgb(141, 218, 211);">
             <h1>Автор</h1>
             <h1>Вопрос</h1>
@@ -74,33 +82,34 @@
             </div>
 
         </div>
-    </div>
-    <script>
-        function expand_comments(id) {
-            document.getElementById(id).hidden = !document.getElementById(id).hidden
-        }
+        </div>
+        <script>
+            function expand_comments(id) {
+                document.getElementById(id).hidden = !document.getElementById(id).hidden
+            }
 
-        function add_main_comment() {
-            document.getElementsByClassName('add_main_comment')[0].hidden = !document.getElementsByClassName('add_main_comment')[0].hidden
+            function add_main_comment() {
+                document.getElementsByClassName('add_main_comment')[0].hidden = !document.getElementsByClassName('add_main_comment')[0].hidden
 
-        }
+            }
 
-        function add_comment(id) {
-            document.getElementById(id).hidden = !document.getElementById(id).hidden
-        }
+            function add_comment(id) {
+                document.getElementById(id).hidden = !document.getElementById(id).hidden
+            }
 
-        let n = document.getElementsByClassName('comments');
-        for (let i = 0; i < n.length; ++i) {
-            n[i].hidden = true;
-        }
-        n = document.getElementsByClassName('add_comment');
-        for (let i = 0; i < n.length; ++i) {
-            n[i].hidden = true;
-        }
-        document.getElementsByClassName('add_main_comment')[0].hidden = true
-    </script>
+            let n = document.getElementsByClassName('comments');
+            for (let i = 0; i < n.length; ++i) {
+                n[i].hidden = true;
+            }
+            n = document.getElementsByClassName('add_comment');
+            for (let i = 0; i < n.length; ++i) {
+                n[i].hidden = true;
+            }
+            document.getElementsByClassName('add_main_comment')[0].hidden = true
+        </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous">
-    </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+                crossorigin="anonymous">
+        </script>
 {% endblock %}
