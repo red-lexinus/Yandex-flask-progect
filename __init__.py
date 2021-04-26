@@ -145,14 +145,17 @@ def disc():
 
 @app.route('/topic', methods=['GET', 'POST'])
 def topic():
-    arr = db_f.search_topics(10)
-    res = []
-    for i in arr:
-        new_arr = [d for d in i]
-        elem = {'id': new_arr[0], 'id_author': new_arr[1], 'name': new_arr[2], 'info': new_arr[3], 'flag_tag': False}
-        res.append(elem)
-    print(res)
-    return render_template('topics.html', topics=res)
+    try:
+        arr = db_f.search_topics(10)
+        res = []
+        for i in arr:
+            new_arr = [d for d in i]
+            elem = {'id': new_arr[0], 'id_author': new_arr[1], 'name': new_arr[2], 'info': new_arr[3],
+                    'flag_tag': current_user.get_id() in ['1', str(new_arr[0])]}
+            res.append(elem)
+        return render_template('topics.html', topics=res)
+    except:
+        topic()
 
 
 if __name__ == '__main__':
