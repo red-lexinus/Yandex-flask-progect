@@ -175,12 +175,12 @@ def topic():
         query = request.get('search')
         print(query)
 
-    arr = db_f.search_topics(10)
+    arr = db_f.search_topics()
     res = []
     for i in arr:
         new_arr = [d for d in i]
         elem = {'id': new_arr[0], 'id_author': new_arr[1], 'name': new_arr[2], 'info': new_arr[3],
-                'flag_tag': current_user.get_id() in ['1', str(new_arr[0])], 'int_id': int(new_arr[0])}
+                'flag_tag': current_user.get_id() in ['1', str(new_arr[1])], 'int_id': int(new_arr[0])}
         res.append(elem)
     return render_template('topics.html', topics=res)
 
@@ -237,7 +237,8 @@ def create_new_post():
             return redirect(url_for('prof'))
         return render_template('create_new_post.html', form=form)
     except:
-        create_new_post()
+        flash('Не удалось создать ваш пост', 'alert alert-danger')
+
 
 
 if __name__ == '__main__':

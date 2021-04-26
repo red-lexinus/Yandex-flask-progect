@@ -148,14 +148,12 @@ def search_topics(id_topic):
     return results
 
 
-def search_topics(max_len, name='', question=''):
+def search_topics(name='', question=''):
     sql = text(f'select id, id_author, name, question from topics')
     results = []
     for row in db.engine.execute(sql):
         if name in row[2] and question in row[3]:
             results.append(row)
-            if len(results) == max_len:
-                return results
     return results
 
 
