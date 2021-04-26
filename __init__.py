@@ -198,9 +198,8 @@ def create_new_post():
 
 
 if __name__ == '__main__':
-    host = 'localhost'
     while True:
         try:
-            app.run(host=host, port=8000, debug=True)
+            app.run()
         except Exception as e:
             print(e.__class__.__name__)
