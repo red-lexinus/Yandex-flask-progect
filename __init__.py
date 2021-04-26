@@ -178,10 +178,10 @@ def quiz():
 
 @app.route('/test/results', methods=['GET', 'POST'])
 def res():
-    e = request.args.get('e', default=1, type=float)
-    d = request.args.get('d', default=1, type=float)
-    g = request.args.get('g', default=1, type=float)
-    s = request.args.get('s', default=1, type=float)
+    economics = request.args.get('e', default=1, type=float)
+    dyplomatic = request.args.get('d', default=1, type=float)
+    civil = request.args.get('g', default=1, type=float)
+    societal = request.args.get('s', default=1, type=float)
     return render_template('8values/results.html')
 
 
