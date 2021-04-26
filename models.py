@@ -15,6 +15,21 @@ class User(db.Model, UserMixin):
         return self.name
 
 
+class Test(db.Model, UserMixin):
+    __tablename__ = 'tests'
+    id = db.Column(db.Integer, primary_key=True)
+    economic = db.Column(db.Text, nullable=False)
+    dyplomatic = db.Column(db.Text, nullable=False)
+    civic = db.Column(db.Text, nullable=False)
+    social = db.Column(db.Text, nullable=False)
+
+    def __init__(self, user_id, e, d, g, s):
+        self.id, self.economic, self.dyplomatic, self.civic, self.social = user_id, e, d, g, s
+
+    def __repr__(self):
+        return self.id
+
+
 class Topic(db.Model):
     __tablename__ = 'topics'
     id = db.Column(db.Integer, primary_key=True)

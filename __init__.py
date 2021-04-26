@@ -35,8 +35,11 @@ def main():
 def prof():
     try:
         username = db_f.search_user_id(current_user.get_id())
-        return render_template('prof.html', name=username)
-    except:
+        e, d, g, s = db_f.search_test_from_id(current_user.get_id())
+        return render_template('prof.html', name=username, e=e, d=d, g=g, s=s)
+    except Exception as e:
+        print(e)
+        print(e.__class__.__name__)
         return prof()
 
 
@@ -128,7 +131,8 @@ def subject(topic_id):
     data = db_f.search_comments(topic_id)
     new_data = []
     info = db_f.search_topics(topic_id)
-    topic_info = {'id_topic': info[0][0], 'author': db_f.search_user_id(info[0][1]), 'question': info[0][2], 'explanation': info[0][3],
+    topic_info = {'id_topic': info[0][0], 'author': db_f.search_user_id(info[0][1]), 'question': info[0][2],
+                  'explanation': info[0][3],
                   'author_id': info[0][1]}
     for i in data:
         comments = []
@@ -138,7 +142,8 @@ def subject(topic_id):
             }
             comments.append(new_keys)
         main_keys = {
-            'id': i[0][0], 'id_topic': i[0][1], 'author': db_f.search_user_id(i[0][2]), 'message': i[0][3], 'comments': comments
+            'id': i[0][0], 'id_topic': i[0][1], 'author': db_f.search_user_id(i[0][2]), 'message': i[0][3],
+            'comments': comments
         }
         new_data.append(main_keys)
     return render_template('topic.html', comments=new_data, topic_info=topic_info)
@@ -179,10 +184,13 @@ def del_post(number):
 
 @app.route('/test/results', methods=['GET', 'POST'])
 def res():
-    e = request.args.get('e', default=1, type=float)
-    d = request.args.get('d', default=1, type=float)
-    g = request.args.get('g', default=1, type=float)
-    s = request.args.get('s', default=1, type=float)
+    e = request.args.get('e', default=1, type=str)
+    d = request.args.get('d', default=1, type=str)
+    g = request.args.get('g', default=1, type=str)
+    s = request.args.get('s', default=1, type=str)
+
+    db_f.save_test_result(current_user.get_id(), e, d, g, s)
+
     return render_template('8values/results.html')
 
 
