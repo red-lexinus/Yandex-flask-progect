@@ -142,18 +142,20 @@ def search_topics_through_username(username):
         return []
 
 
-def search_topics(id_topic):
-    sql = text(f'select id, id_author, name, question from topics where id_author = {id_topic}')
+def search_topic(id_topic):
+    sql = text(f'select id, id_author, name, question from topics where id = {id_topic}')
     results = [row for row in db.engine.execute(sql)]
     return results
 
 
-def search_topics(name='', question=''):
+def search_topics(max_len, name='', question=''):
     sql = text(f'select id, id_author, name, question from topics')
     results = []
     for row in db.engine.execute(sql):
         if name in row[2] and question in row[3]:
             results.append(row)
+            if len(results) == max_len:
+                return results
     return results
 
 
@@ -169,19 +171,6 @@ def search_comments(id_topic):
 
 def del_post(id_topic):
     db.engine.execute(text(f'DELETE  FROM  topics WHERE id = {id_topic}'))
-    sql = text(f'select id from main_comments where id_topic = {id_topic}')
-    results = [[row[0]] for row in db.engine.execute(sql)]
-    for i in results:
-        del_main_comment(i[0])
-
-
-def del_main_comment(id_main):
-    db.engine.execute(text(f'DELETE FROM additional_comments WHERE id_main_comment = {id_main}'))
-    db.engine.execute(text(f'DELETE FROM main_comments WHERE id = {id_main}'))
-
-
-def del_additional_comment(id_comment):
-    db.engine.execute(text(f'DELETE FROM additional_comments WHERE id = {id_comment}'))
 
 
 def change_password(user_id, new_password):

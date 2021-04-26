@@ -38,8 +38,9 @@ def prof():
         e, d, g, s = db_f.search_test_from_id(current_user.get_id())
         return render_template('prof.html', name=username, e=e, d=d, g=g, s=s)
     except Exception as e:
-        pass
-        # logout_user()
+        print(e)
+        print(e.__class__.__name__)
+        return prof()
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -87,29 +88,32 @@ def reg():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     try:
-        if current_user.is_authenticated():
-            return redirect(request.args.get('next') or url_for('prof'))
-    except:
-        flash('Неудалось войти', 'alert alert-success')
-    form = LoginForm()
-    if form.validate_on_submit():
-        log_info = db_f.log_user(form.username.data, form.password.data)
-        print(log_info)
-        if log_info[0]:
-            print(log_info[1][0])
-            flash('Вы успешно вошли поздраляем', 'alert alert-success')
-            user_login = UserLogin().create_log(log_info[1][0])
-            # print(user_login.get_id())
-            login_user(user_login, remember=form.remember_me.data)
-            return redirect(request.args.get('next') or url_for('prof'))
-        else:
-            flash(log_info[1], 'alert alert-danger')
+        try:
+            if current_user.is_authenticated():
+                return redirect(request.args.get('next') or url_for('prof'))
+        except:
+            pass
+        form = LoginForm()
+        if form.validate_on_submit():
+            log_info = db_f.log_user(form.username.data, form.password.data)
+            print(log_info)
+            if log_info[0]:
+                print(log_info[1][0])
+                flash('Вы успешно вошли поздраляем', 'alert alert-success')
+                user_login = UserLogin().create_log(log_info[1][0])
+                # print(user_login.get_id())
+                login_user(user_login, remember=form.remember_me.data)
+                return redirect(request.args.get('next') or url_for('prof'))
+            else:
+                flash(log_info[1], 'alert alert-danger')
 
-    if 'username' in form.errors:
-        flash('Длина вашего имени слишком мала', 'alert alert-danger')
-    if 'password' in form.errors:
-        flash('Длина вашего пароля слишком мала', 'alert alert-danger')
-    return render_template('log.html', form=form)
+        if 'username' in form.errors:
+            flash('Длина вашего имени слишком мала', 'alert alert-danger')
+        if 'password' in form.errors:
+            flash('Длина вашего пароля слишком мала', 'alert alert-danger')
+        return render_template('log.html', form=form)
+    except:
+        login()
 
 
 # @app.route('/profile', methods=['GET', 'POST'])
@@ -122,33 +126,13 @@ def disc():
     return render_template('main.html')
 
 
-@app.route('/del_main_comment<int:id_topic><int:id_comment>')
-def del_main_comment(id_topic, id_comment):
-    db_f.del_main_comment(id_comment)
-    return redirect(url_for('subject', topic_id=id_topic))
-
-
-@app.route('/del_dop_comment<int:id_topic><int:id_comment>')
-def del_dop_comment(id_topic, id_comment):
-    db_f.del_additional_comment(id_comment)
-    return redirect(url_for('subject', topic_id=id_topic))
-
-
 @app.route('/subject<int:topic_id>', methods=['GET', 'POST'])
-@login_required
 def subject(topic_id):
     if request.method == 'POST':
-        d = request.form.to_dict()
-        arr = [key for key in d.keys()]
-        if arr[0] == 'main':
-            db_f.create_new_main_comment(topic_id, int(current_user.get_id()), request.form[arr[0]])
-        else:
-            db_f.create_new_additional_comments(int(arr[0]), int(current_user.get_id()), request.form[arr[0]])
-        return redirect(url_for('subject', topic_id=topic_id))
-
+        print(request.form[0])
     data = db_f.search_comments(topic_id)
     new_data = []
-    info = db_f.search_topics(topic_id)
+    info = db_f.search_topic(topic_id)
     topic_info = {'id_topic': info[0][0], 'author': db_f.search_user_id(info[0][1]), 'question': info[0][2],
                   'explanation': info[0][3],
                   'author_id': info[0][1]}
@@ -156,13 +140,12 @@ def subject(topic_id):
         comments = []
         for d in i[1]:
             new_keys = {
-                'id': d[0], 'id_comment': d[1], 'author': db_f.search_user_id(d[2]), 'message': d[3],
-                'flag_tag': current_user.get_id() in ['1', str(d[2])]
+                'id': d[0], 'id_comment': d[1], 'author': db_f.search_user_id(d[2]), 'message': d[3]
             }
             comments.append(new_keys)
         main_keys = {
             'id': i[0][0], 'id_topic': i[0][1], 'author': db_f.search_user_id(i[0][2]), 'message': i[0][3],
-            'comments': comments, 'flag_tag': current_user.get_id() in ['1', str(i[0][2])]
+            'comments': comments
         }
         new_data.append(main_keys)
     print(len(new_data))
@@ -171,11 +154,7 @@ def subject(topic_id):
 
 @app.route('/topic', methods=['GET', 'POST'])
 def topic():
-    if request.method == 'POST':
-        query = request.get('search')
-        print(query)
-
-    arr = db_f.search_topics()
+    arr = db_f.search_topics(1000000)
     res = []
     for i in arr:
         new_arr = [d for d in i]
@@ -218,16 +197,6 @@ def res():
     return render_template('8values/results.html')
 
 
-@app.errorhandler(404)
-def internal_error(error):
-    return render_template('errors.html', text='Данной страницы не существует')
-
-
-@app.errorhandler(500)
-def internal_error(error):
-    return render_template('errors.html', text='Перезагрузите страницу')
-
-
 @app.route('/create_new_post', methods=['GET', 'POST'])
 def create_new_post():
     try:
@@ -237,8 +206,7 @@ def create_new_post():
             return redirect(url_for('prof'))
         return render_template('create_new_post.html', form=form)
     except:
-        flash('Не удалось создать ваш пост', 'alert alert-danger')
-
+        create_new_post()
 
 
 if __name__ == '__main__':
