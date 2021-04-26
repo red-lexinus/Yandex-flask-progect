@@ -18,6 +18,8 @@
     <script src="https://yastatic.net/share2/share.js"></script>
 
     <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet"/>
+    {% block styles %}
+    {% endblock %}
 </head>
 
 <body>
@@ -25,7 +27,7 @@
     <nav class="navbar navbar-expand-md navbar-light">
 
         <div class="logo navbar-brand">
-            <a href="main.html"><img src="{{ url_for('static', filename='img/logo.png') }}" title="на главную страницу"></a>
+            <a href="{{ url_for('main') }}"><img src="{{ url_for('static', filename='img/logo.png') }}" title="на главную страницу"></a>
 
         </div>
 
@@ -36,7 +38,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <h2 class="navbar-nav">Дискуссия ведёт к истине</h2>
             <div class="navbar-nav ml-auto">
-                <a href="{{ url_for('prof') }}" class="nav-item nav-link">Профиль</a>
+                <a href="{{ url_for('login') }}" class="nav-item nav-link">Профиль</a>
                 <a href="{{ url_for('topic') }}" class="nav-item nav-link">Темы</a>
                 <a href="{{ url_for('disc') }}" class="nav-item nav-link">Дискуссии</a>
                 <div class="collapse navbar-collapse">
@@ -46,12 +48,15 @@
                                    aria-label="Search">
                             <button class="btn btn-outline-success" type="submit">Поиск</button>
                         </form>
+                    </ul>
                 </div>
             </div>
         </div>
     </nav>
 </div>
-
+    {% for cat, msg in get_flashed_messages(True) %}
+        <div class="{{ cat }}" role="alert">{{ msg }}</div>
+    {% endfor %}
 {% block body %}
 {% endblock %}
 

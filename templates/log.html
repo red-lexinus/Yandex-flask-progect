@@ -1,65 +1,38 @@
 {% extends 'base.html' %}
 
 {% block title %}
-<title>Дискуссия ведёт к истине</title>
+    <title>Дискуссия ведёт к истине</title>
+{% endblock %}
+
+{% block styles %}
+    <link href="{{ url_for('static', filename='css/reg.css') }}" rel="stylesheet"/>
 {% endblock %}
 
 {% block body %}
-
-<div class="bs-menu">
-    <nav class="navbar navbar-expand-md navbar-light">
-
-        <div class="logo navbar-brand">
-            <a href="main.html"><img src="..\img\logo.png" title="на главную страницу" alt=""/></a>
-            <!--<img src="{{ url_for('static', filename='img/logo.png') }}" height="35" alt="CoolBrand">!-->
-        </div>
-
-        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <h2 class="navbar-nav">Дискуссия ведёт к истине</h2>
-            <div class="navbar-nav ml-auto">
-                <a href="{{ url_for('prof') }}" class="nav-item nav-link">Профиль</a>
-                <a href="{{ url_for('topic') }}" class="nav-item nav-link">Темы</a>
-                <a href="{{ url_for('disc') }}" class="nav-item nav-link">Дискуссии</a>
-                <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <form id='first_form' class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Поиск темы(дискуссии)"
-                                   aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Поиск</button>
-                        </form>
-                </div>
+    <div class="main">
+        <div class="card">
+            <div class="card-body">
+                <h1>Авторизация</h1>
+                <a href="{{ url_for('reg') }}">
+                    Зарегистрроваться
+                </a>
+                <form method="post" , id='form'>
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.username.label() }}
+                        {{ form.username() }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.password.label() }}
+                        {{ form.password() }}
+                    </div>
+                    <div class="mb-3 form-check">
+                        {{ form.remember_me.label() }}
+                        {{ form.remember_me() }}
+                    </div>
+                    {{ form.submit() }}
+                </form>
             </div>
         </div>
-    </nav>
-</div>
-<div class="main">
-    <div class="card">
-        <div class="card-body">
-            <h1>Авторизация</h1>
-            <form id='form'>
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Ваша электронная почта</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <!-- <div id="emailHelp" class="form-text"></div> -->
-                </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Ваш пароль</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1">
-                </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">Сохранить пароль</label>
-                </div>
-                <button type="submit" class="btn btn-primary">Войти в свой аккаунт</button>
-            </form>
-            <a href="{{ url_for('reg') }}">
-                <button type="button" class="btn btn-primary">Создать новый аккаунт</button>
-            </a>
-        </div>
     </div>
-</div>
 {% endblock %}

@@ -1,76 +1,44 @@
 {% extends 'base.html' %}
 
 {% block title %}
-<title>Дискуссия ведёт к истине</title>
+    <title>Дискуссия ведёт к истине</title>
+{% endblock %}
+
+{% block styles %}
+    <link href="{{ url_for('static', filename='css/topics.css') }}" rel="stylesheet"/>
 {% endblock %}
 
 {% block body %}
-
-<div class="bs-menu">
-    <nav class="navbar navbar-expand-md navbar-light">
-
-        <div class="logo navbar-brand">
-            <a href="main.html"><img src="..\img\logo.png" title="на главную страницу" alt=""/></a>
-            <!--<img src="{{ url_for('static', filename='img/logo.png') }}" height="35" alt="CoolBrand">!-->
-        </div>
-
-        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <h2 class="navbar-nav">Дискуссия ведёт к истине</h2>
-            <div class="navbar-nav ml-auto">
-                <a href="{{ url_for('prof') }}" class="nav-item nav-link">Профиль</a>
-                <a href="{{ url_for('topic') }}" class="nav-item nav-link">Темы</a>
-                <a href="{{ url_for('disc') }}" class="nav-item nav-link">Дискуссии</a>
-                <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <form id='first_form' class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Поиск темы(дискуссии)"
-                                   aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Поиск</button>
-                        </form>
-                </div>
+    <div class="main">
+        <div class="search_topic">
+            <div class="label">
+                <h3>Поиск нужной темы</h3>
             </div>
+            <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Название темы" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Поискать</button>
+            </form>
         </div>
-    </nav>
-</div>
-<div class="main">
-    <div class="search_topic">
-        <div class="label">
-            <h3>Поиск нужной темы</h3>
+        <div class="tape">
+            {% for elem in topics %}
+                <div class="topic"
+                     style="  background: linear-gradient(to bottom right, rgb(255, 76, 76), rgb(255, 243, 72));">
+                    <div class="topic_body">
+                        <div class="block">
+                            <h1>{{ elem['name'] }}</h1>
+                            <p>{{ elem['info'] }}</p>
+                            <div class="buttons">
+                                <a class="btn btn-primary" href="#" role="button" style="min-width: 30%;">Перейти к
+                                    теме</a>
+                                {% if elem['flag_tag'] %}
+                                    <a class="btn btn-primary" href="#" role="button" style="min-width: 30%;">Удалить тему</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            {% endfor %}
         </div>
-        <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Название темы" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Поискать</button>
-        </form>
     </div>
-    <div class="tape">
-        <div class="topic">
-            <div class="topic_body">
-                <img src="../img/145.png" alt="">
-                <div class="body_text">
-                    <h1>Название Темы</h1>
-                    <p>Дополнительная инфа<br>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Explicabo,
-                        molestiae in doloremque ex, facilis nulla nihil tenetur debitis placeat ipsam recusandae.
-                        Culpa tenetur quos modi nisi? Fuga hic necessitatibus ipsum?</p>
-                    <a class="btn btn-primary" href="#" role="button" style="min-width: 30%;">Перейти к теме</a>
-                </div>
-            </div>
-        </div>
-        {% for elem in topics %}
-        <div class="topic">
-            <div class="topic_body">
-                <img src="../img/{{i['photo']}}" alt="">
-                <div class="body_text">
-                    <h1>{{i['name']}}</h1>
-                    <p>{{i['info']}}</p>
-                    <a class="btn btn-primary" href="#" role="button" style="min-width: 30%;">Перейти к теме</a>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
 {% endblock %}
