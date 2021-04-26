@@ -141,6 +141,7 @@ def subject(topic_id):
             'id': i[0][0], 'id_topic': i[0][1], 'author': db_f.search_user_id(i[0][2]), 'message': i[0][3], 'comments': comments
         }
         new_data.append(main_keys)
+    print(len(new_data))
     return render_template('topic.html', comments=new_data, topic_info=topic_info)
 
 
