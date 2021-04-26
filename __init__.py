@@ -154,7 +154,7 @@ def subject(topic_id):
 
 @app.route('/topic', methods=['GET', 'POST'])
 def topic():
-    arr = db_f.search_topics(10)
+    arr = db_f.search_topics(1000000)
     res = []
     for i in arr:
         new_arr = [d for d in i]
