@@ -79,13 +79,17 @@ def save_test_result(user_id, e, d, g, s):
     db.session.commit()
     return True
 
+
 def search_test_from_id(user_id):
-    sql = text(f'select * from tests where id = {user_id}')
-    results = [row[1:] for row in db.engine.execute(sql)]
-    if results[0]:
-        return results[0]
-    else:
+    try:
+        sql = text(f'select * from tests where id = {user_id}')
+        results = [row[1:] for row in db.engine.execute(sql)]
+        if results[0]:
+            return results[0]
         return [50, 50, 50, 50]
+    except:
+        return [50, 50, 50, 50]
+
 
 def search_user_id(user_id):
     sql = text(f'select username from users where id = "{user_id}"')
@@ -167,6 +171,19 @@ def search_comments(id_topic):
 
 def del_post(id_topic):
     db.engine.execute(text(f'DELETE  FROM  topics WHERE id = {id_topic}'))
+    sql = text(f'select id from main_comments where id_topic = {id_topic}')
+    results = [[row[0]] for row in db.engine.execute(sql)]
+    for i in results:
+        del_main_comment(i[0])
+
+
+def del_main_comment(id_main):
+    db.engine.execute(text(f'DELETE FROM additional_comments WHERE id_main_comment = {id_main}'))
+    db.engine.execute(text(f'DELETE FROM main_comments WHERE id = {id_main}'))
+
+
+def del_additional_comment(id_comment):
+    db.engine.execute(text(f'DELETE FROM additional_comments WHERE id = {id_comment}'))
 
 
 def change_password(user_id, new_password):

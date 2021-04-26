@@ -19,7 +19,6 @@ app.config['SUM'] = 0
 app.config['APP_DIR'] = os.path.abspath(os.path.dirname(__file__))
 app.config['STATIC_DIR'] = os.path.join(app.config['APP_DIR'], 'static')
 app.config['UPLOAD_DIR'] = os.path.join(app.config['STATIC_DIR'], 'img')
-
 db = SQLAlchemy(app)
 
 # login_manager = LoginManager(app)
