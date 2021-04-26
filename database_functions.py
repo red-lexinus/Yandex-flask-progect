@@ -137,5 +137,3 @@ def change_password(user_id, new_password):
     item = User.query.get(user_id)
     item.password = new_password
     db.session.commit()
-
-

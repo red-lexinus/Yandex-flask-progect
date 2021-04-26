@@ -60,7 +60,7 @@ def prof():
         username = db_f.search_user_id(current_user.get_id())
         return render_template('prof.html', name=username)
     except:
-        prof()
+        return prof()
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -108,29 +108,32 @@ def reg():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     try:
-        if current_user.is_authenticated():
-            return redirect(request.args.get('next') or url_for('prof'))
-    except:
-        pass
-    form = LoginForm()
-    if form.validate_on_submit():
-        log_info = db_f.log_user(form.username.data, form.password.data)
-        print(log_info)
-        if log_info[0]:
-            print(log_info[1][0])
-            flash('Вы успешно вошли поздраляем', 'alert alert-success')
-            user_login = UserLogin().create_log(log_info[1][0])
-            # print(user_login.get_id())
-            login_user(user_login, remember=form.remember_me.data)
-            return redirect(request.args.get('next') or url_for('prof'))
-        else:
-            flash(log_info[1], 'alert alert-danger')
+        try:
+            if current_user.is_authenticated():
+                return redirect(request.args.get('next') or url_for('prof'))
+        except:
+            pass
+        form = LoginForm()
+        if form.validate_on_submit():
+            log_info = db_f.log_user(form.username.data, form.password.data)
+            print(log_info)
+            if log_info[0]:
+                print(log_info[1][0])
+                flash('Вы успешно вошли поздраляем', 'alert alert-success')
+                user_login = UserLogin().create_log(log_info[1][0])
+                # print(user_login.get_id())
+                login_user(user_login, remember=form.remember_me.data)
+                return redirect(request.args.get('next') or url_for('prof'))
+            else:
+                flash(log_info[1], 'alert alert-danger')
 
-    if 'username' in form.errors:
-        flash('Длина вашего имени слишком мала', 'alert alert-danger')
-    if 'password' in form.errors:
-        flash('Длина вашего пароля слишком мала', 'alert alert-danger')
-    return render_template('log.html', form=form)
+        if 'username' in form.errors:
+            flash('Длина вашего имени слишком мала', 'alert alert-danger')
+        if 'password' in form.errors:
+            flash('Длина вашего пароля слишком мала', 'alert alert-danger')
+        return render_template('log.html', form=form)
+    except:
+        login()
 
 
 # @app.route('/profile', methods=['GET', 'POST'])
@@ -158,6 +161,18 @@ def topic():
         topic()
 
 
+
+
+@app.route('/create_new_post', methods=['GET', 'POST'])
+def create_new_post():
+    try:
+        form = CreatePost()
+        if form.validate_on_submit():
+            db_f.create_new_topic(int(current_user.get_id()), form.name.data, form.question.data, form.explanation.data)
+            return redirect(url_for('prof'))
+        return render_template('create_new_post.html', form=form)
+    except:
+        create_new_post()
 if __name__ == '__main__':
     host = 'localhost'
     while True:

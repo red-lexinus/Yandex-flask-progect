@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Дискуссия ведёт к истине</title>
+{% endblock %}
+
+{% block styles %}
+    <link href="{{ url_for('static', filename='css/reg.css') }}" rel="stylesheet"/>
+        <link href="{{ url_for('static', filename='css/create_new_post.css') }}" rel="stylesheet"/>
+{% endblock %}
+
+{% block body %}
+    <div class="main">
+        <div class="card" style="min-width: 80%">
+            <div class="card-body" style="min-width: 100%">
+                <h1>Ваш новый пост</h1>
+                <form method="post" id='form'>
+                    {{ form.hidden_tag() }}
+                    {{ form.name.label() }}
+                    {{ form.name() }}
+                    {{ form.question.label() }}
+                    {{ form.question() }}
+                    {{ form.explanation.label() }}
+                    {{ form.explanation() }}
+                    {{ form.submit() }}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
