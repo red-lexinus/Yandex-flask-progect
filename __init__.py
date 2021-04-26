@@ -146,6 +146,7 @@ def subject(topic_id):
             'comments': comments
         }
         new_data.append(main_keys)
+    print(len(new_data))
     return render_template('topic.html', comments=new_data, topic_info=topic_info)
 
 

@@ -16,7 +16,7 @@
             <button class="btn btn-primary" type="submit" onclick="add_main_comment()">Оставить коментарий</button>
         </div>
         <div class="add_main_comment">
-            <form method="post">
+            <form method="post" id="first_form">
                 <div>
                     <textarea name="text" placeholder="Ваш комментарий"></textarea>
                     <button class="btn btn-primary" type="submit">Отправить ответ</button>
@@ -24,42 +24,44 @@
             </form>
         </div>
         <div class="main_comments">
-            {% for elem in cooments %}
+            {% for comment in comments %}
                 <div class="main_comment">
                     <div class="comment">
                         <div class="comment_head">
-                            <h1>{{ elem['author'] }}</h1>
+                            <h1>{{ comment['author'] }}</h1>
                         </div>
                         <div class="comment_body">
-                            <p>{{ elem['message'] }}</p>
+                            <p>{{ comment['message'] }}</p>
                         </div>
                         <div class="buttoms">
                             <button class="btn btn-primary" type="submit"
-                                    onclick="add_comment('add_comments_{{ elem['id'] }}')">
+                                    onclick="add_comment('add_comments_{{ comment['id'] }}')">
                                 Написать
                                 ответ
                             </button>
                             <button class="btn btn-primary" type="submit"
-                                    onclick="expand_comments('comments_{{ elem['id'] }}')">
+                                    onclick="expand_comments('comments_{{ comment['id'] }}')">
                                 Развернуть
                                 ответы
                             </button>
                         </div>
                     </div>
-                    <div class="add_comment" id='add_comments_{{ elem['id'] }}'>
-                        <div>
-                            <textarea name="text" placeholder="Ваш комментарий"></textarea>
-                            <button class="btn btn-primary" type="submit">Отправить ответ</button>
-                        </div>
+                    <div class="add_comment" id='add_comments_{{ comment['id'] }}'>
+                        <form id="form_{{ comment['id'] }}" method="post">
+                            <div>
+                                <textarea name="text" placeholder="Ваш комментарий"></textarea>
+                                <button class="btn btn-primary" type="submit">Отправить ответ</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="comments" id='comments_{{ elem['id'] }}'>
-                        {% for el in elem['comments'] %}
+                    <div class="comments" id='comments_{{ comment['id'] }}'>
+                        {% for i in comment['comments'] %}
                             <div class="comment">
                                 <div class="comment_head">
-                                    <h1>Автор+фото</h1>
+                                    <h1>{{ i['author'] }}</h1>
                                 </div>
                                 <div class="comment_body">
-                                    <p>Типа комент</p>
+                                    <p>{{ i['message'] }}</p>
                                 </div>
                             </div>
                         {% endfor %}
