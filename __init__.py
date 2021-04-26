@@ -196,7 +196,6 @@ def create_new_post():
     except:
         create_new_post()
 
-
 if __name__ == '__main__':
     while True:
         try:
