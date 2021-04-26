@@ -56,8 +56,11 @@ def main():
 @app.route('/prof', methods=['GET', 'POST'])
 @login_required
 def prof():
-    username = db_f.search_user_id(current_user.get_id())
-    return render_template('prof.html', name=username)
+    try:
+        username = db_f.search_user_id(current_user.get_id())
+        return render_template('prof.html', name=username)
+    except:
+        prof()
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -146,7 +149,7 @@ def topic():
     res = []
     for i in arr:
         new_arr = [d for d in i]
-        elem = {'id': new_arr[0], 'id_author': new_arr[1], 'name': new_arr[2], 'info': new_arr[3]}
+        elem = {'id': new_arr[0], 'id_author': new_arr[1], 'name': new_arr[2], 'info': new_arr[3], 'flag_tag': False}
         res.append(elem)
     print(res)
     return render_template('topics.html', topics=res)

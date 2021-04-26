@@ -27,8 +27,13 @@
                         <div class="block">
                             <h1>{{ elem['name'] }}</h1>
                             <p>{{ elem['info'] }}</p>
-                            <a class="btn btn-primary" href="#" role="button" style="min-width: 30%;">Перейти к теме</a>
-                            <a class="btn btn-primary" href="#" role="button" style="min-width: 30%;">Удалить тему</a>
+                            <div class="buttons">
+                                <a class="btn btn-primary" href="#" role="button" style="min-width: 30%;">Перейти к
+                                    теме</a>
+                                {% if elem['flag_tag'] %}
+                                    <a class="btn btn-primary" href="#" role="button" style="min-width: 30%;">Удалить тему</a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
