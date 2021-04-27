@@ -258,6 +258,6 @@ def internal_error(error):
 if __name__ == '__main__':
     while True:
         try:
-            app.run(debug=True)
+            app.run()
         except Exception as e:
             print(e.__class__.__name__)
