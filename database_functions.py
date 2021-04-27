@@ -110,19 +110,31 @@ def create_new_topic(id_author, name, question, explanation):
 def create_new_main_comment(id_topic, id_author, message):
     if not check_new_main_comment(message)[0]:
         return check_new_main_comment(message)[1]
-    main_comment = MainComment(id_topic=id_topic, id_author=id_author, message=message)
-    db.session.add(main_comment)
-    db.session.commit()
-    return True
+    try:
+        main_comment = MainComment(id_topic=id_topic, id_author=id_author, message=message)
+        db.session.add(main_comment)
+        db.session.commit()
+        return True
+    except:
+        main_comment = MainComment(id_topic=id_topic, id_author=id_author, message=message)
+        db.session.add(main_comment)
+        db.session.commit()
+        return True
 
 
 def create_new_additional_comments(id_main_comment, id_author, message):
     if not check_new_main_comment(message)[0]:
         return check_new_main_comment(message)[1]
-    main_comment = AdditionalComment(id_main_comment=id_main_comment, id_author=id_author, message=message)
-    db.session.add(main_comment)
-    db.session.commit()
-    return True
+    try:
+        main_comment = AdditionalComment(id_main_comment=id_main_comment, id_author=id_author, message=message)
+        db.session.add(main_comment)
+        db.session.commit()
+        return True
+    except:
+        main_comment = AdditionalComment(id_main_comment=id_main_comment, id_author=id_author, message=message)
+        db.session.add(main_comment)
+        db.session.commit()
+        return True
 
 
 def search_topics_through_user_id(user_id):

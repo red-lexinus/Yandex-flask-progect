@@ -13,6 +13,8 @@ login_manager.login_view = 'login'
 login_manager.login_message = 'Авторизируйтесь пожалуйста'
 login_manager.login_message_category = 'alert alert-success'
 
+not_login_id = 25
+
 
 @login_manager.user_loader
 def load_user(info):
@@ -128,28 +130,48 @@ def disc():
 
 @app.route('/subject<int:topic_id>', methods=['GET', 'POST'])
 def subject(topic_id):
-    if request.method == 'POST':
-        print(request.form[0])
-    data = db_f.search_comments(topic_id)
-    new_data = []
-    info = db_f.search_topic(topic_id)
-    topic_info = {'id_topic': info[0][0], 'author': db_f.search_user_id(info[0][1]), 'question': info[0][2],
-                  'explanation': info[0][3],
-                  'author_id': info[0][1]}
-    for i in data:
-        comments = []
-        for d in i[1]:
-            new_keys = {
-                'id': d[0], 'id_comment': d[1], 'author': db_f.search_user_id(d[2]), 'message': d[3]
+    try:
+        user_id = not_login_id
+        try:
+            if current_user.is_authenticated():
+                user_id = int(current_user.get_id())
+        except:
+            pass
+        if request.method == 'POST':
+            form = request.form.to_dict()
+            for key in form.keys():
+                print(key, form[key])
+                if len(form[key]) < 5 or len(form[key]) >= 1600:
+                    flash('длина вашего комментария слишком маленькая или большая   ', 'alert alert-danger')
+                else:
+                    if key == 'main':
+                        db_f.create_new_main_comment(topic_id, user_id, form[key])
+                    else:
+                        db_f.create_new_additional_comments(int(key), user_id, form[key])
+        data = db_f.search_comments(topic_id)
+        new_data = []
+        info = db_f.search_topic(topic_id)
+        topic_info = {'id_topic': info[0][0], 'author': db_f.search_user_id(info[0][1]), 'question': info[0][2],
+                      'explanation': info[0][3],
+                      'author_id': info[0][1]}
+        for i in data:
+            comments = []
+            for d in i[1]:
+                new_keys = {
+                    'id': d[0], 'id_comment': d[1], 'author': db_f.search_user_id(d[2]), 'message': d[3]
+                }
+                comments.append(new_keys)
+            main_keys = {
+                'id': i[0][0], 'id_topic': i[0][1], 'author': db_f.search_user_id(i[0][2]), 'message': i[0][3],
+                'comments': comments
             }
-            comments.append(new_keys)
-        main_keys = {
-            'id': i[0][0], 'id_topic': i[0][1], 'author': db_f.search_user_id(i[0][2]), 'message': i[0][3],
-            'comments': comments
-        }
-        new_data.append(main_keys)
-    print(len(new_data))
-    return render_template('topic.html', comments=new_data, topic_info=topic_info)
+            new_data.append(main_keys)
+        print(len(new_data))
+        return render_template('topic.html', comments=new_data, topic_info=topic_info)
+    except:
+        return render_template('errors.html',
+                               text='Такой страницы не существует или произошли неполадки с базой'
+                                    ' дынных на хостнге(попробуйте перезагрузить)')
 
 
 @app.route('/topic', methods=['GET', 'POST'])
@@ -165,16 +187,19 @@ def topic():
 
 
 @app.route('/test', methods=['GET', 'POST'])
+@login_required
 def test():
     return render_template('8values/index.html')
 
 
 @app.route('/test/instructions', methods=['GET', 'POST'])
+@login_required
 def instructions():
     return render_template('8values/instructions.html')
 
 
 @app.route('/test/quiz', methods=['GET', 'POST'])
+@login_required
 def quiz():
     return render_template('8values/quiz.html')
 
@@ -186,6 +211,7 @@ def del_post(number):
 
 
 @app.route('/test/results', methods=['GET', 'POST'])
+@login_required
 def res():
     e = request.args.get('e', default=1, type=str)
     d = request.args.get('d', default=1, type=str)
@@ -198,6 +224,7 @@ def res():
 
 
 @app.route('/create_new_post', methods=['GET', 'POST'])
+@login_required
 def create_new_post():
     try:
         form = CreatePost()
@@ -209,9 +236,28 @@ def create_new_post():
         create_new_post()
 
 
+@app.errorhandler(404)
+def internal_error(error):
+    db.session.rollback()
+    return render_template('errors.html', text='Такой страницы не существует'), 404
+
+
+@app.errorhandler(503)
+def internal_error(error):
+    db.session.rollback()
+    return render_template('errors.html', text='У вас нет доступа'), 503
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return render_template('errors.html',
+                           text='у нас некоторые неполадки с сервером на которомы мы храним нашу бд'), 500
+
+
 if __name__ == '__main__':
     while True:
         try:
-            app.run()
+            app.run(debug=True)
         except Exception as e:
             print(e.__class__.__name__)

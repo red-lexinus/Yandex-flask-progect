@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %}
- <title>Дискуссия ведёт к истине</title>
+<title>Дискуссия ведёт к истине</title>
+{% endblock %}
+
+{% block styles %}
+<link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet"/>
 {% endblock %}
 
 {% block body %}
@@ -23,32 +27,32 @@
     <div class="card" id="reg">
         <div class="card-body">
             <h1 style="color: red; margin-bottom: 25px;">Регистрация</h1>
-            <h3>Инфа по регистрации</h3>
-            <p style='margin-bottom: 20px'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum ratione
-                voluptas impedit id facere<br>
-                voluptatem dicta maiores ullam consequatur ea aperiam quaerat sit beatae sapiente obcaecati,<br>
-                deserunt reprehenderit corporis! Ut corrupti sit expedita nulla. Soluta, quidem ullam? Corrupti<br>
-                magni, sunt, culpa delectus recusandae non laudantium minus voluptates, iusto consequatur
-                facere?<br>
-            </p>
+            <h3 style='margin-bottom: 20px'>Для регистрации перейдите по ссылке ниже.
+                Зарегистрируйтесь, а после войдите в новый аккаунт, это сделано, чтобы вы быстрее запомнили логин и
+                пароль
+            </h3>
+            <a href="{{ url_for('reg') }}"
+               class="nav-item nav-link">Регистрация</a>
         </div>
     </div>
     <div class="card" id="сreat_1">
         <div class="card-body">
-            <h1 style="color: red; margin-bottom: 25px;">Регистрация</h1>
-            <h3>Инфа по регистрации</h3>
+            <h1 style="color: red; margin-bottom: 25px;">Создание темы</h1>
+            <h3 style="padding-bottom: 20px;">для создания новой темы перейдите в свой профиль и создайте новую тему </h3>
         </div>
     </div>
     <div class="card" id="сreat_2">
         <div class="card-body">
-            <h1 style="color: red; margin-bottom: 25px;">Регистрация</h1>
-            <h3>Инфа по регистрации</h3>
+            <h1 style="color: red; margin-bottom: 25px;">Создание дисскуссии</h1>
+            <h3 style="padding-bottom: 20px;">Сейчас дисскусии находятся в разработке, поэтому создать их невозможно</h3>
         </div>
     </div>
     <div class="card" id="1vs2">
         <div class="card-body">
-            <h1 style="color: red; margin-bottom: 25px;">Регистрация</h1>
-            <h3>Инфа по регистрации</h3>
+            <h1 style="color: red; margin-bottom: 25px;">Разница дисскусии и темы</h1>
+            <h3 style="padding-bottom: 20px;">Темы это просто посты для обсуждения каких-либо вопросов<br>
+                А дискуссии это публичные обсуждения нескольких людей(как диалог в мессенджере, но открытый для общества)<br>
+            </h3>
         </div>
     </div>
 </div>

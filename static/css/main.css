@@ -58,6 +58,9 @@ body {
     border-radius: 20px;
     align-items: center;
     flex-flow: row nowrap;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-bottom: 15px;
 }
 
 .card {
